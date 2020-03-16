@@ -5,7 +5,7 @@ import numpy as np
 from .natural_lines import line
 
 
-def hatch_cell(ctx, xcell, ycell):
+def hatch_cell(ctx, xcell, ycell, strength=5, seed=None, print_points=False):
     hatch_dir_x = xcell % 2
     hatch_dir_y = ycell % 2
 
@@ -24,8 +24,11 @@ def hatch_cell(ctx, xcell, ycell):
         yi1 = yi + random.random() * 10. - 10.
         xi2 = xi + random.random() * 10. - 5.
         yi2 = yi + 100 - random.random() * 10. - 10.
-        print(f"{xi1}, {yi1} -> {xi2}, {yi2}")
-        line(ctx, xi1, yi1, xi2, yi2)
+        #print(f"{xi1}, {yi1} -> {xi2}, {yi2}")
+        if i % 2 == 0:
+            line(ctx, xi1, yi1, xi2, yi2, squiggle_strength=strength, print_points=print_points, seed=seed)
+        else:
+            line(ctx, xi2, yi2, xi1, yi1, squiggle_strength=strength, print_points=print_points, seed=seed)
 
     #ctx.rotate(xcell * 180. + ycell * 90.)
     ctx.stroke()
