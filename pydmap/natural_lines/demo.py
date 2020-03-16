@@ -2,7 +2,7 @@ import random
 
 from .draw import rect
 
-def demo(ctx):
+def demo(ctx, height, width):
     a = 10
     w = 100
     ws = w * .9
