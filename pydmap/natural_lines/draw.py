@@ -56,18 +56,15 @@ def line(ctx, sx, sy, fx, fy, squiggle_strength=10., seed=None, print_points=Fal
     else:
         dt = 0.2
 
-    last_point = {"x": sx, "y": sy};
-    ctx.set_source_rgba(0.7, 0.7, 0.7, 0.7)
+    last_point = {"x": sx, "y": sy}
     ctx.new_path()
     ctx.move_to(last_point["x"], last_point["y"])
     
     #print(f"last.x = {last_point['x']}, last.y = {last_point['y']}")
     for t in np.linspace(0, 2., int(2. / dt) + 1):
-        current_point = time_to_point(sx, sy, fx, fy, t);
-        squiggle_control_point = get_squiggle(last_point, current_point, strength=squiggle_strength, seed=seed);
-        #print(f"current.x = {current_point['x']}, current.y = {current_point['y']}")
-        #ctx.line_to(current_point["x"], current_point["y"])
-        quad_to(ctx, squiggle_control_point["x"], squiggle_control_point["y"], current_point["x"], current_point["y"]);
+        current_point = time_to_point(sx, sy, fx, fy, t)
+        squiggle_control_point = get_squiggle(last_point, current_point, strength=squiggle_strength, seed=seed)
+        quad_to(ctx, squiggle_control_point["x"], squiggle_control_point["y"], current_point["x"], current_point["y"])
 
         if print_points:
             print(f"current.x = {current_point['x']}, current.y = {current_point['y']}")
