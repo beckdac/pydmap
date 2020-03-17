@@ -1,6 +1,7 @@
+import math
 import random
 
-from .draw import rect, cubic_bezier
+from .draw import rect, cubic_bezier, arc
 
 def demo(ctx, height, width):
     a = 10
@@ -14,6 +15,9 @@ def demo(ctx, height, width):
     rect(ctx, a + 2*w, a, ws, ws, squiggle_strength=5, print_points=print_points)
     rect(ctx, a + 3*w, a, ws, ws, squiggle_strength=7, print_points=print_points)
     rect(ctx, a + 4*w, a, ws, ws, squiggle_strength=10, print_points=print_points)
-
-    cubic_bezier(ctx, 116,10, 10,40, 30,160, 150,110)
     ctx.stroke()
+
+    cubic_bezier(ctx, 10,170, 40,60, 120,180, 200,140, squiggle_strength=1, n=50)
+
+    arc(ctx, 50, 50, 30, 30 * math.pi/180., 240 * math.pi/180., squiggle_strength=1, n=20)
+    arc(ctx, 50, 50, 30, 280 * math.pi/180., 300 * math.pi/180., squiggle_strength=1, n=20)

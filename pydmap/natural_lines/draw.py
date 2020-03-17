@@ -2,6 +2,8 @@ import math
 import random
 
 import numpy as np
+
+
 def quad_to(ctx, x1, y1, x2, y2):
     x0, y0 = ctx.get_current_point()
 
@@ -85,11 +87,48 @@ def rect(ctx, x, y, w, h, squiggle_strength=5., seed=None, print_points=False):
     line(ctx, x + w, y + h, x    , y + h, squiggle_strength=squiggle_strength, seed=seed, print_points=print_points)
     line(ctx, x    , y + h, x    , y    , squiggle_strength=squiggle_strength, seed=seed, print_points=print_points)
 
-def arc(ctx, xc, yc, radius, angle1, angle2):
+def arc_segment(ctx, xc, yc, radius, angle1, angle2, n=50, squiggle_strength=1):
     while angle2 < angle1:
         angle2 += 2. * math.pi
 
-def cubic_bezier(ctx, x0, y0, x1, y1, x2, y2, x3, y3, n=50):
+    # find x1 and x4 - the start and end points on the arc
+    x1 = xc + radius * math.sin(angle1)
+    y1 = xc + radius * math.cos(angle1)
+    x4 = xc + radius * math.sin(angle2)
+    y4 = xc + radius * math.cos(angle2)
+
+    # https://stackoverflow.com/posts/44829356/revisions
+    ax = x1 - xc
+    ay = y1 - yc
+    bx = x4 - xc
+    by = y4 - yc
+    q1 = ax * ax + ay * ay
+    q2 = q1 + ax * bx + ay * by
+    k2 = 4. / 3. * (math.sqrt(2 * q1 * q2) - q2) / (ax * by - ay * bx)
+    x2 = xc + ax - k2 * ay
+    y2 = yc + ay + k2 * ax
+    x3 = xc + bx + k2 * by
+    y3 = yc + by - k2 * bx
+    cubic_bezier(ctx, x1, y1, x2, y2, x3, y3, x4, y4, n=n)
+
+def arc(ctx, xc, yc, radius, angle1, angle2, n=50, squiggle_strength=1):
+    while angle2 < angle1:
+        angle2 += 2. * math.pi
+
+    MAX_ARC_SEGMENT_ANGLE = math.pi / 8.
+    delta = angle2 - angle1
+    if delta > MAX_ARC_SEGMENT_ANGLE:
+        divs = int(delta / MAX_ARC_SEGMENT_ANGLE) + 1
+        last_angle = angle1
+        for current_angle in np.linspace(angle1, angle2, divs)[1:]:
+            arc_segment(ctx, xc, yc, radius, last_angle, current_angle, n=int(n/divs) + 1, squiggle_strength=squiggle_strength)
+            last_angle = current_angle
+    else:
+        arc_segment(ctx, xc, yc, radius, angle1, angle2, n=n, squiggle_strength=squiggle_strength)
+
+
+# from rosetta code
+def cubic_bezier(ctx, x0, y0, x1, y1, x2, y2, x3, y3, n=50, squiggle_strength=1):
     ctx.new_path()
     ctx.move_to(x0, y0)
 
@@ -106,6 +145,6 @@ def cubic_bezier(ctx, x0, y0, x1, y1, x2, y2, x3, y3, n=50):
         pts.append((x, y))
 
     for i in range(n):
-        line(ctx, pts[i][0], pts[i][1], pts[i+1][0], pts[i+1][1], squiggle_strength=1)
+        line(ctx, pts[i][0], pts[i][1], pts[i+1][0], pts[i+1][1], squiggle_strength=squiggle_strength)
 
     ctx.stroke()
