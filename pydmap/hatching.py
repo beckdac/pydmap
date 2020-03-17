@@ -27,7 +27,7 @@ def hatch_cell(ctx, xcell, ycell, lines_per_cell=5, squiggle_strength=5, seed=No
 
     #line(ctx, mid_x, mid_y, 100, 100)
 
-    for x in np.linspace(0., CELL_SIZE, lines_per_cell + 2)[1:-1]:
+    for x in np.linspace(CELL_SIZE * .1, CELL_SIZE * .9, lines_per_cell):
         xi = xcell * CELL_SIZE + x
         yi = ycell * CELL_SIZE
         xi1 = xi + random.random() * 10. + CELL_SIZE / 2 / 10. / 5.
