@@ -30,10 +30,10 @@ def hatch_cell(ctx, xcell, ycell, lines_per_cell=5, squiggle_strength=5, seed=No
     for x in np.linspace(CELL_SIZE * .1, CELL_SIZE * .9, lines_per_cell):
         xi = xcell * CELL_SIZE + x
         yi = ycell * CELL_SIZE
-        xi1 = xi + random.random() * 10. + CELL_SIZE / 2 / 10. / 5.
-        yi1 = yi + random.random() * 10. + CELL_SIZE / 2 / 10. / 5.
-        xi2 = xi + random.random() * 10. - CELL_SIZE / 2 / 10. / 5.
-        yi2 = yi + CELL_SIZE - random.random() * 10. - CELL_SIZE / 2 / 10. / 5.
+        xi1 = xi + random.random() * 10. + CELL_SIZE / 2 / 10.
+        yi1 = yi + random.random() * 10. + CELL_SIZE / 2 / 10.
+        xi2 = xi + random.random() * 10. - CELL_SIZE / 2 / 10.
+        yi2 = yi + CELL_SIZE - random.random() * 10. - CELL_SIZE / 2 / 10.
         line(ctx, xi1, yi1, xi2, yi2, squiggle_strength=squiggle_strength, print_points=print_points, seed=seed)
 
     ctx.stroke()
@@ -54,3 +54,5 @@ def demo(ctx, height, width):
     hatch_cell(ctx, 1, 1)
     hatch_cell(ctx, 2, 0)
     hatch_cell(ctx, 2, 1)
+    hatch_cell(ctx, 3, 0)
+    hatch_cell(ctx, 3, 1)
