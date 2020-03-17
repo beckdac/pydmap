@@ -4,7 +4,7 @@ import pydmap
 from pydmap import hatching
 
 def main():
-    width = 200
+    width = 400
     height = 200
     pydmap.render_png(filename='demo.png', width=width, height=height, draw_func=hatching.demo)
 
