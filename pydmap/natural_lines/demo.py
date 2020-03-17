@@ -17,7 +17,8 @@ def demo(ctx, height, width):
     rect(ctx, a + 4*w, a, ws, ws, squiggle_strength=10, print_points=print_points)
     ctx.stroke()
 
-    cubic_bezier(ctx, 10,170, 40,60, 120,180, 200,140, squiggle_strength=1, n=50)
+    arc(ctx, a + 2*w + w/2, 150, 30, 30 * math.pi/180., 240 * math.pi/180., squiggle_strength=1, n=20)
+    arc(ctx, a + 3*w + w/2, 150, 30, 280 * math.pi/180., 300 * math.pi/180., squiggle_strength=1, n=20)
+    arc(ctx, a + 4*w + w/2, 150, 40, 0 * math.pi/180., 359.99 * math.pi/180., squiggle_strength=10, n=80)
 
-    arc(ctx, 50, 50, 30, 30 * math.pi/180., 240 * math.pi/180., squiggle_strength=1, n=20)
-    arc(ctx, 50, 50, 30, 280 * math.pi/180., 300 * math.pi/180., squiggle_strength=1, n=20)
+    cubic_bezier(ctx, 10,170, 40,60, 120,180, 200,140, squiggle_strength=1, n=50)

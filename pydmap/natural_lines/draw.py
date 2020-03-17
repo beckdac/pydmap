@@ -93,9 +93,9 @@ def arc_segment(ctx, xc, yc, radius, angle1, angle2, n=50, squiggle_strength=1):
 
     # find x1 and x4 - the start and end points on the arc
     x1 = xc + radius * math.sin(angle1)
-    y1 = xc + radius * math.cos(angle1)
+    y1 = yc + radius * math.cos(angle1)
     x4 = xc + radius * math.sin(angle2)
-    y4 = xc + radius * math.cos(angle2)
+    y4 = yc + radius * math.cos(angle2)
 
     # https://stackoverflow.com/posts/44829356/revisions
     ax = x1 - xc
