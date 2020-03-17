@@ -4,9 +4,9 @@ import random
 import numpy as np
 
 from .natural_lines import line, arc, rect, cubic_bezier
-from .constants import CELL_SIZE, EPSILON, MAX_DELTA
+from .constants import CELL_SIZE, EPSILON, MAX_DELTA, CENTER_DOT_FRAC
 
-def grid_cell(ctx, xcell, ycell, squiggle_strength=5, rgba=(.7, .7, .7, .2), seed=None):
+def grid_cell(ctx, xcell, ycell, squiggle_strength=5, rgba=(.7, .7, .7, .15), seed=None):
     min_x = xcell * CELL_SIZE
     min_y = ycell * CELL_SIZE
     mid_x = min_x + CELL_SIZE / 2.
@@ -17,7 +17,7 @@ def grid_cell(ctx, xcell, ycell, squiggle_strength=5, rgba=(.7, .7, .7, .2), see
     ctx.set_source_rgba(rgba[0], rgba[1], rgba[2], rgba[3])
 
     # draw a bottom left dot on a random chance
-    if random.random() < .6:
+    if random.random() < CENTER_DOT_FRAC:
         arc(ctx, max_x, max_y, 1, 0, 2 * math.pi - EPSILON)
 
     # draw cell divider lines on +1, +1
