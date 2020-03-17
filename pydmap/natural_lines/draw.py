@@ -46,15 +46,20 @@ def get_squiggle(prev, current, strength=5., seed=None):
 
     return midpoint;
 
-def line(ctx, sx, sy, fx, fy, squiggle_strength=10., seed=None, print_points=False):
+def line(ctx, sx, sy, fx, fy, squiggle_strength=10., seed=None, print_points=False, dt=None):
 
-    dist = math.sqrt(math.pow(sx - fx, 2) + math.pow(sy - fy, 2));
-    if dist < 200:
-        dt = 0.5
-    elif dist < 400:
-        dt = 0.3
-    else:
-        dt = 0.2
+    if dt is None:
+        dist = math.sqrt(math.pow(sx - fx, 2) + math.pow(sy - fy, 2));
+        # these are the results of a small number of asthetic tests and may
+        # evolve or become arguments
+        if dist < 100:
+            dt = 0.8
+        elif dist < 200:
+            dt = 0.5
+        elif dist < 400:
+            dt = 0.3
+        else:
+            dt = 0.2
 
     last_point = {"x": sx, "y": sy}
     ctx.new_path()
@@ -84,7 +89,11 @@ def arc(ctx, xc, yc, radius, angle1, angle2):
     while angle2 < angle1:
         angle2 += 2. * math.pi
 
-def cubic_bezier(ctx, x0, y0, x1, y1, x2, y2, x3, y3, n=10):
+def cubic_bezier(ctx, x0, y0, x1, y1, x2, y2, x3, y3, n=50):
+    ctx.new_path()
+    ctx.move_to(x0, y0)
+
+    pts = []
     for i in range(n+1):
         t = i / n
         a = (1. - t)**3
@@ -94,5 +103,9 @@ def cubic_bezier(ctx, x0, y0, x1, y1, x2, y2, x3, y3, n=10):
 
         x = int(a * x0 + b * x1 + c * x2 + d * x3)
         y = int(a * y0 + b * y1 + c * y2 + d * y3)
+        pts.append((x, y))
 
-        line(ctx, x0, y0, x1, y1)
+    for i in range(n):
+        line(ctx, pts[i][0], pts[i][1], pts[i+1][0], pts[i+1][1], squiggle_strength=1)
+
+    ctx.stroke()
