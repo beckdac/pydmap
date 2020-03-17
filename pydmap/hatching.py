@@ -1,3 +1,4 @@
+import math
 import random
 
 import numpy as np
@@ -10,9 +11,10 @@ def hatch_cell(ctx, xcell, ycell, lines_per_cell=5, squiggle_strength=5, seed=No
 
     hatch_dir_x = xcell % 2
     hatch_dir_y = ycell % 2
+    mid_x = xcell * 100 + 50
+    mid_y = ycell * 100 + 50
 
     for x in np.linspace(0., 100., lines_per_cell + 2)[1:-1]:
-        print(x)
         xi = xcell * 100. + x
         yi = ycell * 100.
         xi1 = xi + random.random() * 10. + 5.
@@ -20,6 +22,10 @@ def hatch_cell(ctx, xcell, ycell, lines_per_cell=5, squiggle_strength=5, seed=No
         xi2 = xi + random.random() * 10. - 5.
         yi2 = yi + 100 - random.random() * 10. - 10.
         line(ctx, xi1, yi1, xi2, yi2, squiggle_strength=squiggle_strength, print_points=print_points, seed=seed)
+
+    ctx.translate(-mid_x, -mid_y)
+    ctx.rotate(-math.pi/4)
+    ctx.translate(mid_x, mid_y)
 
     ctx.stroke()
     ctx.restore()
