@@ -4,9 +4,7 @@ import random
 import numpy as np
 
 from .natural_lines import line
-
-
-CELL_SIZE = 100
+from .constants import CELL_SIZE
 
 def hatch_cell(ctx, xcell, ycell, lines_per_cell=5, squiggle_strength=5, seed=None, print_points=False):
     ctx.save()
