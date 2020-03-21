@@ -111,24 +111,18 @@ def arc_segment(ctx, xc, yc, radius, angle1, angle2, n=50, squiggle_strength=1):
     y3 = yc + by - k2 * bx
     cubic_bezier(ctx, x1, y1, x2, y2, x3, y3, x4, y4, n=n)
 
-def arc(ctx, xc, yc, radius, angle1, angle2, n=50, squiggle_strength=1):
+def arc(ctx, xc, yc, radius, angle1, angle2, segments=10, n=10, squiggle_strength=1):
     while angle2 < angle1:
         angle2 += 2. * math.pi
 
-    MAX_ARC_SEGMENT_ANGLE = math.pi / 8.
-    delta = angle2 - angle1
-    if delta > MAX_ARC_SEGMENT_ANGLE:
-        divs = int(delta / MAX_ARC_SEGMENT_ANGLE) + 1
-        last_angle = angle1
-        for current_angle in np.linspace(angle1, angle2, divs)[1:]:
-            arc_segment(ctx, xc, yc, radius, last_angle, current_angle, n=int(n/divs) + 1, squiggle_strength=squiggle_strength)
-            last_angle = current_angle
-    else:
-        arc_segment(ctx, xc, yc, radius, angle1, angle2, n=n, squiggle_strength=squiggle_strength)
+    last_angle = angle1
+    for current_angle in np.linspace(angle1, angle2, segments)[1:]:
+        arc_segment(ctx, xc, yc, radius, last_angle, current_angle, n=n, squiggle_strength=squiggle_strength)
+        last_angle = current_angle
 
 
 # from rosetta code
-def cubic_bezier(ctx, x0, y0, x1, y1, x2, y2, x3, y3, n=50, squiggle_strength=1):
+def cubic_bezier(ctx, x0, y0, x1, y1, x2, y2, x3, y3, n=40, squiggle_strength=1):
     ctx.new_path()
     ctx.move_to(x0, y0)
 
