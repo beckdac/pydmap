@@ -24,14 +24,6 @@ def demo(ctx, height, width):
             hatch_cell(hatch_ctx, xcell, ycell)
     hatch_surface.write_to_png('hatching.png')
 
-    if False:
-        ctx.save()
-        ctx.set_source_surface(hatch_surface, 0, 0)
-        ctx.arc(width/4., height/4., height/8., 0, 2.*math.pi)
-        ctx.clip()
-        ctx.paint()
-        ctx.restore()
-
     ctx.save()
     for xcell in range(int(width / CELL_SIZE)):
         for ycell in range(int(height / CELL_SIZE)):
