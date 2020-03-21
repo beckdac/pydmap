@@ -49,8 +49,12 @@ def demo(ctx, height, width):
     ctx.restore()
 
     ctx.save()
+    ctx.set_line_width(3)
     natural_lines.demo(ctx, width, height)
     ctx.restore()
 
+    ctx.save()
+    ctx.set_line_width(5)
     ctx.set_source_rgba(0, 0, 0, 1)
     arc(ctx, width/2., height/2., height/8., 0, 2.*math.pi, segments=72, n=3)
+    ctx.restore()
