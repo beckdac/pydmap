@@ -13,7 +13,7 @@ def main():
     #pydmap.render_png(filename='demo4.png', width=width, height=height, draw_func=simple_objects.demo)
     width = 2000
     height = 2000
-    pydmap.render_png(filename='demo.png', width=width, height=height, draw_func.mapping.demo)
+    pydmap.render_png(filename='demo.png', width=width, height=height, draw_func=mapping.demo)
 
 if __name__== "__main__":
   main()

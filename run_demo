@@ -1,5 +1,6 @@
 #!/bin/bash
 
 ./demo.py
-convert demo1.png demo2.png demo3.png +append demo.png
-open demo.png
+#convert demo1.png demo2.png demo3.png +append demo.png
+#open demo.png
+explorer.exe demo.png
