@@ -21,10 +21,12 @@ def demo(ctx, height, width):
             hatch_cell(hatch_ctx, xcell, ycell)
     hatch_surface.write_to_png('hatching.png')
 
-    #ctx.set_source_surface(hatch_surface, 0, 0)
-    #ctx.arc(width/4., height/4., height/8., 0, 2.*math.pi)
-    #ctx.clip()
-    #ctx.paint()
+    ctx.save()
+    ctx.set_source_surface(hatch_surface, 0, 0)
+    ctx.arc(width/4., height/4., height/8., 0, 2.*math.pi)
+    ctx.clip()
+    ctx.paint()
+    ctx.restore()
 
     # draw the hatching to a surface
     grid_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
@@ -35,10 +37,12 @@ def demo(ctx, height, width):
             grid_cell(grid_ctx, xcell, ycell)
     grid_surface.write_to_png('grid.png')
 
+    ctx.save()
     ctx.set_source_surface(grid_surface, 0, 0)
-    ctx.arc(width/4., height/2. + height/4., height/8., 0, 2.*math.pi)
+    ctx.arc(width/4 + width/2., height/4., height/8., 0, 2.*math.pi)
     ctx.clip()
     ctx.paint()
+    ctx.restore()
 
     ctx.set_source_rgba(0, 0, 0, 1)
     arc(ctx, width/2., height/2., height/8., 9, 360.)
