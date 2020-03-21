@@ -7,6 +7,9 @@ import numpy as np
 from .natural_lines import line, arc
 from .hatching import hatch_cell
 from .grid import grid_cell
+from . import natural_lines
+from . import hatching
+from . import grid
 from .constants import CELL_SIZE
 
 
@@ -21,14 +24,15 @@ def demo(ctx, height, width):
             hatch_cell(hatch_ctx, xcell, ycell)
     hatch_surface.write_to_png('hatching.png')
 
-    ctx.save()
-    ctx.set_source_surface(hatch_surface, 0, 0)
-    ctx.arc(width/4., height/4., height/8., 0, 2.*math.pi)
-    ctx.clip()
-    ctx.paint()
-    ctx.restore()
+    if False:
+        ctx.save()
+        ctx.set_source_surface(hatch_surface, 0, 0)
+        ctx.arc(width/4., height/4., height/8., 0, 2.*math.pi)
+        ctx.clip()
+        ctx.paint()
+        ctx.restore()
 
-    # draw the hatching to a surface
+    # draw the grid to a surface
     grid_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
     grid_ctx = cairo.Context(grid_surface)
     grid_ctx.set_source_rgba(0., 0., 0., 1.)
@@ -39,10 +43,14 @@ def demo(ctx, height, width):
 
     ctx.save()
     ctx.set_source_surface(grid_surface, 0, 0)
-    ctx.arc(width/4 + width/2., height/4., height/8., 0, 2.*math.pi)
+    ctx.arc(width/2., height/2., height/8., 0, 2.*math.pi)
     ctx.clip()
     ctx.paint()
     ctx.restore()
 
+    ctx.save()
+    natural_lines.demo(ctx, width, height)
+    ctx.restore()
+
     ctx.set_source_rgba(0, 0, 0, 1)
-    arc(ctx, width/2., height/2., height/8., 9, 360.)
+    arc(ctx, width/2., height/2., height/8., 0, 2.*math.pi, segments=72, n=3)
