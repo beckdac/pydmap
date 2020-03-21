@@ -13,7 +13,11 @@ from . import grid
 from .constants import CELL_SIZE
 
 
-def demo(ctx, height, width):
+def demo(ctx, width, height):
+    circ_radius = CELL_SIZE * 3
+    xc = width / 2
+    yc = height / 2
+    hatch_cells = 2.3 * CELL_SIZE
 
     # draw the hatching to a surface
     hatch_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
@@ -25,14 +29,12 @@ def demo(ctx, height, width):
     hatch_surface.write_to_png('hatching.png')
 
     ctx.save()
-    for xcell in range(int(width / CELL_SIZE)):
-        for ycell in range(int(height / CELL_SIZE)):
-            hatch_cell(ctx, xcell, ycell)
-    fade = cairo.RadialGradient(width/2., height/2., height/8.,
-                                width/2., height/2., height/8. + CELL_SIZE * 2.5)
-    fade.add_color_stop_rgba(0, 0, 0, 0, 1);
-    fade.add_color_stop_rgba(.9, 0, 0, 0, 0);
     ctx.set_source_surface(hatch_surface, 0, 0)
+    fade = cairo.RadialGradient(xc, yc, 0, xc, yc, circ_radius + hatch_cells)
+    fade.add_color_stop_rgba(0, 0, 0, 0, 0);
+    fade.add_color_stop_rgba(circ_radius / (circ_radius + hatch_cells), 0, 0, 0, 0);
+    fade.add_color_stop_rgba(circ_radius / (circ_radius + hatch_cells), 0, 0, 0, 1);
+    fade.add_color_stop_rgba(1, 0, 0, 0, 0);
     ctx.mask(fade)
     ctx.restore()
 
@@ -47,7 +49,7 @@ def demo(ctx, height, width):
 
     ctx.save()
     ctx.set_source_surface(grid_surface, 0, 0)
-    ctx.arc(width/2., height/2., height/8., 0, 2.*math.pi)
+    ctx.arc(xc, yc, circ_radius, 0, 2.*math.pi)
     ctx.clip()
     ctx.paint()
     ctx.restore()
@@ -60,7 +62,7 @@ def demo(ctx, height, width):
     ctx.save()
     ctx.set_line_width(5)
     ctx.set_source_rgba(0, 0, 0, 1)
-    arc(ctx, width/2., height/2., height/8., 0, 2.*math.pi, segments=72, n=3)
+    arc(ctx, xc, yc, circ_radius, 0, 2.*math.pi, segments=72, n=3)
     ctx.restore()
 
     hallway_mask_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
