@@ -13,7 +13,77 @@ from . import grid
 from .constants import CELL_SIZE
 
 
+class Room:
+
+    def __init__(self, name, flags=[]):
+        self.name = name
+        self.flags = flags
+
+
+class Path:
+
+    def __init__(self, room_name_1, room_name_2, flags=[]):
+        self.room_name_1 = room_name_1
+        self.room_name_2 = room_name_2
+        self.flags = flags
+
+        
+class Map:
+
+    def __init__(self, name, width, height, cell_size=CELL_SIZE):
+        self.name = name
+        self.width = width
+        self.height = height
+        self.cell_size = cell_size
+        self.rooms = {}
+        self.pathes = []
+
+    def __repr__(self):
+        return f"<Map name:{self.name} width:{self.width} height:{self.height} has {len(self.rooms)} rooms and {len(self.pathes)} pathes>"
+    
+    def has_room(self, room_name):
+        if room_name in self.rooms:
+            return True
+        else:
+            return False
+   
+    def add_room(self, room):
+        self.rooms[room.name] = room
+
+    def remove_room(self, room_name):
+        self.rooms.pop(room_name)
+
+    def has_path(self, room_name_1, room_name_2):
+        assert self.has_room(room_name_1)
+        assert self.has_room(room_name_2)
+        for path in self.pathes:
+            if ((path.room_name_1 == room_name_1 and path.room_name_2 == room_name_2) or \
+                (path.room_name_2 == room_name_2 and path.room_name_1 == room_name_1)):
+                        return True
+            else:
+                pass
+        return False
+
+    def add_path(self, room_name_1, room_name_2, flags=[]):
+        assert not self.has_path(room_name_1, room_name_2)
+        self.pathes.append(Path(room_name_1, room_name_2, flags))
+
+    def draw_map(self, context):
+        pass
+
+
 def demo(ctx, width, height):
+    map = Map('demo', width, height, cell_size=CELL_SIZE)
+    map.add_room(Room('start'))
+    map.add_room(Room('mid1'))
+    map.add_room(Room('mid2'))
+    map.add_room(Room('end'))
+    map.add_path('start', 'mid1', flags=['arc'])
+    map.add_path('start', 'mid2', flags=['door', 'trapped'])
+    map.add_path('mid1', 'end', flags=['door'])
+    print(map)
+
+def old_demo(ctx, width, height):
     circ_radius = CELL_SIZE * 3
     xc = width / 2
     yc = height / 2
