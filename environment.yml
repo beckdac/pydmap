@@ -10,5 +10,6 @@ dependencies:
   - notebook
   - pillow
   - imagemagick
+  - sympy
 prefix: /Users/dacb/miniconda3/envs/pydmap
 
