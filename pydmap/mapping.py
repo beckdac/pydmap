@@ -18,6 +18,7 @@ def demo(ctx, width, height):
     xc = width / 2
     yc = height / 2
     hatch_cells = 2.3 * CELL_SIZE
+    hallway_extension = 2 * CELL_SIZE
 
     # draw the hatching to a surface
     hatch_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
@@ -65,8 +66,23 @@ def demo(ctx, width, height):
     arc(ctx, xc, yc, circ_radius, 0, 2.*math.pi, segments=72, n=3)
     ctx.restore()
 
-    hallway_mask_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
-    hallway_mask_ctx = cairo.Context(hallway_mask_surface)
-    hallway_mask_ctx.set_source_rgba(0, 0, 0, 1)
-    hallway_mask_ctx.set_line_width(100)
-    # unfinished
+    room_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+    room_ctx = cairo.Context(room_surface)
+    room_ctx.set_source_rgba(0, 0, 0, 1)
+    room_ctx.set_line_width(CELL_SIZE)
+    room_ctx.move_to(width/2, height/2 + circ_radius + hallway_extension)
+    room_ctx.line_to(width/2, height/2 - circ_radius - hallway_extension)
+    room_ctx.move_to(width/2 + circ_radius + hallway_extension, height/2)
+    room_ctx.line_to(width/2 - circ_radius - hallway_extension, height/2)
+    room_ctx.stroke()
+    room_ctx.arc(width/2, height/2, circ_radius, 0, 2*math.pi)
+    room_ctx.fill()
+    room_surface.write_to_png('room.png')
+    # apply mask
+    ctx.set_operator(cairo.OPERATOR_DEST_OUT)
+    ctx.set_source_surface(room_surface, 0, 0)
+    ctx.paint()
+
+    #ctx.identity_matrix()
+    #ctx.set_source_surface(room_surface, 0, 0)
+    #ctx.paint()
