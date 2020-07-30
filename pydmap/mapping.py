@@ -3,6 +3,7 @@ import random
 
 import cairo
 import numpy as np
+from sympy.geometry import Point2D
 
 from .natural_lines import line, arc
 from .hatching import hatch_cell
@@ -15,9 +16,14 @@ from .constants import CELL_SIZE
 
 class Room:
 
-    def __init__(self, name, flags=[]):
+    def __init__(self, name, loc, flags=[]):
         self.name = name
+        self.loc = loc
+        assert isinstance(self.loc, Point2D)
         self.flags = flags
+
+    def __repr__(self):
+        return f"<Room name:{self.name}, loc:({self.loc.x}, {self.loc.y}), flags:{self.flags}>"
 
 
 class Path:
@@ -26,6 +32,9 @@ class Path:
         self.room_name_1 = room_name_1
         self.room_name_2 = room_name_2
         self.flags = flags
+
+    def __repr__(self):
+        return f"<Path room_1:{self.room_name_1} room_2:{self.room_name_2} flags:{self.flags}>"
 
         
 class Map:
@@ -68,20 +77,24 @@ class Map:
         assert not self.has_path(room_name_1, room_name_2)
         self.pathes.append(Path(room_name_1, room_name_2, flags))
 
-    def draw_map(self, context):
-        pass
+    def draw(self, context):
+        for room in self.rooms:
+            print(self.rooms[room])
+        for path in self.pathes:
+            print(path)
 
 
 def demo(ctx, width, height):
     map = Map('demo', width, height, cell_size=CELL_SIZE)
-    map.add_room(Room('start'))
-    map.add_room(Room('mid1'))
-    map.add_room(Room('mid2'))
-    map.add_room(Room('end'))
+    map.add_room(Room('start', Point2D(width/4, height/4)))
+    map.add_room(Room('mid1', Point2D(width/2 + width/4, height/2)))
+    map.add_room(Room('mid2', Point2D(width/2, height/2 + height /4)))
+    map.add_room(Room('end', Point2D(width/2 + width/4, height/2 + height/4)))
     map.add_path('start', 'mid1', flags=['arc'])
     map.add_path('start', 'mid2', flags=['door', 'trapped'])
     map.add_path('mid1', 'end', flags=['door'])
     print(map)
+    map.draw(ctx)
 
 def old_demo(ctx, width, height):
     circ_radius = CELL_SIZE * 3
